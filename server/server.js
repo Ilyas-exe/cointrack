@@ -1,10 +1,13 @@
 // server.js
-
 const express = require('express');
+const dotenv = require('dotenv').config(); // <-- Add this
+const connectDB = require('./config/db'); // <-- Add this
+
+connectDB(); // <-- Add this to connect to the DB
 
 const app = express();
 
-const PORT = 5001; // We will move this to a .env file later
+const PORT = process.env.PORT || 5001; // <-- Use port from .env file
 
 // A simple test route to make sure the server is working
 app.get('/', (req, res) => {
