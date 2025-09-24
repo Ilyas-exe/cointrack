@@ -5,6 +5,8 @@ const connectDB = require('./config/db'); // <-- Add this
 connectDB(); 
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT || 5001; // <-- Use port from .env file
 
