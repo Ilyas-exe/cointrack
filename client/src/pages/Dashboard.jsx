@@ -5,6 +5,7 @@ import TransactionForm from '../components/TransactionForm';
 import Summary from '../components/Summary';
 import { getTransactions, reset } from '../features/transactions/transactionSlice';
 import TransactionItem from '../components/TransactionItem';
+import TransactionChart from '../components/TransactionChart';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ function Dashboard() {
           <h3 className='text-center text-slate-500'>You have not set any transactions yet.</h3>
         )}
       </section>
+      <TransactionChart />
     </>
   );
 }
