@@ -1,6 +1,6 @@
 const express = require('express');
-const dotenv = require('dotenv').config(); // <-- Add this
-const connectDB = require('./config/db'); // <-- Add this
+const dotenv = require('dotenv').config();
+const connectDB = require('./config/db');
 
 connectDB(); 
 
@@ -8,10 +8,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/transactions', require('./routes/transactionRoutes'));
 
-const PORT = process.env.PORT || 5001; // <-- Use port from .env file
+const PORT = process.env.PORT || 5001; 
 
-// A simple test route to make sure the server is working
+
 app.get('/', (req, res) => {
     res.send('API is working!');
 });
