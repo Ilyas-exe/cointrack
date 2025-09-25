@@ -54,9 +54,33 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
+// @desc    Update transaction
+// @route   PUT /api/transactions/:id
+// @access  Private
+const updateTransaction = async (req, res) => {
+  const transaction = await Transaction.findById(req.params.id);
+
+  if (!transaction) {
+    res.status(404);
+    throw new Error('Transaction not found');
+  }
+
+  // Check for user and ownership
+  if (!req.user || transaction.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('User not authorized');
+  }
+
+  const updatedTransaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, {
+    new: true, // This will create it if it doesn't exist
+  });
+
+  res.status(200).json(updatedTransaction);
+};
 
 module.exports = {
   getTransactions,
   addTransaction,
   deleteTransaction,
+  updateTransaction,
 };
