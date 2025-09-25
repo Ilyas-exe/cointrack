@@ -86,7 +86,17 @@ const loginUser = async (req, res) => {
     }
 };
 
+
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+const getMe = async (req, res) => {
+    // The user object is attached to the request in the authMiddleware
+    res.status(200).json(req.user);
+};
+
 module.exports = {
     registerUser,
     loginUser,
+    getMe,
 };
