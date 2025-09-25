@@ -46,20 +46,32 @@ function Dashboard() {
 
       <Summary />
 
-      <TransactionForm />
+      {/* Main Content Area - Two Column Layout */}
+      <div className='flex flex-col lg:flex-row gap-8 mt-12'>
 
-      <section className='mt-12'>
-        <h2 className='text-2xl font-bold mb-6 text-center'>Your Transactions</h2>
-        {transactions.length > 0 ? (
-          <div className='space-y-4 max-w-xl mx-auto'>
-            {transactions.map((transaction) => (
-              <TransactionItem key={transaction._id} transaction={transaction} />
-            ))}
-          </div>
-        ) : (
-          <h3 className='text-center text-slate-500'>You have not set any transactions yet.</h3>
-        )}
-      </section>
+        {/* Left Column: Transactions List (Yellow Rectangle) */}
+        <section className='lg:w-1/2'>
+          <h2 className='text-2xl font-bold mb-6 text-center'>Your Transactions</h2>
+          {transactions.length > 0 ? (
+            <div className='space-y-4 h-[600px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-800'>
+              {transactions.map((transaction) => (
+                <TransactionItem key={transaction._id} transaction={transaction} />
+              ))}
+            </div>
+          ) : (
+            <div className='bg-slate-800 p-8 rounded-xl h-[600px] flex items-center justify-center'>
+              <h3 className='text-center text-slate-500'>You have not set any transactions yet.</h3>
+            </div>
+          )}
+        </section>
+
+        {/* Right Column: Add Transaction Form (White Rectangle) */}
+        <section className='lg:w-1/2'>
+          <TransactionForm />
+        </section>
+      </div>
+
+      {/* Bottom Section: Chart */}
       <TransactionChart />
     </>
   );
