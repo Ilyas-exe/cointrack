@@ -1,8 +1,10 @@
-import { FaUser } from 'react-icons/fa';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { register, reset } from '../features/auth/authSlice';
 
 function Register() {
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,8 +12,24 @@ function Register() {
     password2: '',
   });
 
-  // 3. Destructure the formData for easier access
   const { name, email, password, password2 } = formData;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess || user) {
+      navigate('/');
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -21,28 +39,35 @@ function Register() {
   };
 
   const onSubmit = (e) => {
-    e.preventDefault(); // Prevents the page from refreshing
-    console.log(formData);
+    e.preventDefault();
+    if (password !== password2) {
+      toast.error('Passwords do not match');
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      dispatch(register(userData));
+    }
   };
+
+  // Spinner can be added here based on isLoading state
+  if (isLoading) {
+    return <h2>Loading...</h2>
+  }
 
   return (
     <>
-      {/* Main Container */}
       <div className='max-w-md mx-auto mt-10 bg-slate-800 p-8 rounded-xl shadow-lg'>
-
-        {/* Heading Section */}
         <section className='text-center mb-8'>
-          <h1 className='text-3xl font-bold flex items-center justify-center gap-2'>
-            Register
-          </h1>
+          <h1 className='text-3xl font-bold'>Register</h1>
           <p className='text-slate-400 mt-2'>Please create an account</p>
         </section>
-
-        {/* Form Section */}
         <section>
-          <form onSubmit={onSubmit} >
+          <form onSubmit={onSubmit}>
+            {/* Form inputs are the same as before */}
             <div className='mb-4'>
-              <label htmlFor='name' className='block mb-2 font-medium'>Name</label>
               <input
                 type='text'
                 id='name'
@@ -55,7 +80,6 @@ function Register() {
               />
             </div>
             <div className='mb-4'>
-              <label htmlFor='email' className='block mb-2 font-medium'>Email</label>
               <input
                 type='email'
                 id='email'
@@ -68,7 +92,6 @@ function Register() {
               />
             </div>
             <div className='mb-4'>
-              <label htmlFor='password' className='block mb-2 font-medium'>Password</label>
               <input
                 type='password'
                 id='password'
@@ -81,7 +104,6 @@ function Register() {
               />
             </div>
             <div className='mb-6'>
-              <label htmlFor='password2' className='block mb-2 font-medium'>Confirm Password</label>
               <input
                 type='password'
                 id='password2'
