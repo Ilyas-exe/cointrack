@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import TransactionForm from '../components/TransactionForm';
 import Summary from '../components/Summary';
 import { getTransactions, reset } from '../features/transactions/transactionSlice';
+import TransactionItem from '../components/TransactionItem';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -51,26 +52,7 @@ function Dashboard() {
         {transactions.length > 0 ? (
           <div className='space-y-4 max-w-xl mx-auto'>
             {transactions.map((transaction) => (
-              <div
-                key={transaction._id}
-                className={`bg-slate-800 p-4 rounded-lg flex justify-between items-center border-l-4 ${
-                  transaction.type === 'income' ? 'border-green-500' : 'border-red-500'
-                }`}
-              >
-                <div>
-                  <h3 className='font-bold text-lg'>{transaction.text}</h3>
-                  <p className='text-sm text-slate-400'>
-                    {new Date(transaction.createdAt).toLocaleDateString('en-US')}
-                  </p>
-                </div>
-                <div
-                  className={`font-bold text-xl ${
-                    transaction.type === 'income' ? 'text-green-500' : 'text-red-500'
-                  }`}
-                >
-                  {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount)}
-                </div>
-              </div>
+              <TransactionItem key={transaction._id} transaction={transaction} />
             ))}
           </div>
         ) : (

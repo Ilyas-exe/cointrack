@@ -33,28 +33,25 @@ const addTransaction = async (req, res) => {
 // @route   DELETE /api/transactions/:id
 // @access  Private
 const deleteTransaction = async (req, res) => {
-  const transaction = await Transaction.findById(req.params.id);
+  try {
+    const transaction = await Transaction.findById(req.params.id);
 
-  if (!transaction) {
-    res.status(404);
-    throw new Error('Transaction not found');
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+
+    // Make sure the logged in user matches the transaction user
+    if (transaction.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    // Use findByIdAndDelete instead of remove()
+    await Transaction.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ id: req.params.id });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
   }
-
-  // Check for user
-  if (!req.user) {
-    res.status(401);
-    throw new Error('User not found');
-  }
-
-  // Make sure the logged in user matches the transaction user
-  if (transaction.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error('User not authorized');
-  }
-
-  await transaction.remove();
-
-  res.status(200).json({ id: req.params.id });
 };
 
 
