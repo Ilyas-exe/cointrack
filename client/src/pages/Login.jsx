@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { login, reset } from '../features/auth/authSlice';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -7,6 +11,23 @@ function Login() {
   });
 
   const { email, password } = formData;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess || user) {
+      navigate('/');
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -17,27 +38,27 @@ function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    const userData = {
+      email,
+      password,
+    };
+    dispatch(login(userData));
   };
+
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <>
-      {/* Main Container */}
       <div className='max-w-md mx-auto mt-10 bg-slate-800 p-8 rounded-xl shadow-lg'>
-        
-        {/* Heading Section */}
         <section className='text-center mb-8'>
-          <h1 className='text-3xl font-bold'>
-            Login
-          </h1>
+          <h1 className='text-3xl font-bold'>Login</h1>
           <p className='text-slate-400 mt-2'>Login to track your finances</p>
         </section>
-
-        {/* Form Section */}
         <section>
           <form onSubmit={onSubmit}>
             <div className='mb-4'>
-              <label htmlFor='email' className='block mb-2 font-medium'>Email</label>
               <input
                 type='email'
                 id='email'
@@ -50,7 +71,6 @@ function Login() {
               />
             </div>
             <div className='mb-6'>
-              <label htmlFor='password' className='block mb-2 font-medium'>Password</label>
               <input
                 type='password'
                 id='password'
