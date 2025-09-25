@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import TransactionForm from '../components/TransactionForm';
+import Summary from '../components/Summary';
 import { getTransactions, reset } from '../features/transactions/transactionSlice';
 
 function Dashboard() {
@@ -40,6 +41,8 @@ function Dashboard() {
         <h1 className='text-4xl font-bold'>Welcome {user && user.name}</h1>
         <p className='text-slate-400 mt-2'>Your Personal Finance Dashboard</p>
       </section>
+
+      <Summary />
 
       <TransactionForm />
 
