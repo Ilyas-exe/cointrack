@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const connectDB = require('./config/db');
+import currencyRoutes from './routes/currencyRoutes.js';
 
 connectDB(); 
 
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
+app.use('/api/currency', currencyRoutes);
 
 const PORT = process.env.PORT || 5001; 
 

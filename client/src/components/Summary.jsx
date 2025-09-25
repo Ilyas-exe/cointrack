@@ -2,6 +2,10 @@ import { useSelector } from 'react-redux';
 
 function Summary() {
   const { transactions } = useSelector((state) => state.transactions);
+  const { selectedCurrency, rates } = useSelector((state) => state.currency);
+
+  // The conversion rate for the selected currency
+  const rate = rates[selectedCurrency] || 1;
 
   // Calculate totals using the reduce method
   const totalIncome = transactions
@@ -18,8 +22,8 @@ function Summary() {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
-    }).format(amount);
+      currency: selectedCurrency,
+    }).format(amount * rate);
   };
 
   return (

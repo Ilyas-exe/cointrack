@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
+import CurrencySelector from './CurrencySelector';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Header() {
         </Link>
       </div>
       <nav>
+        <CurrencySelector />
         <ul className='flex items-center gap-4'>
           {user ? (
             // If user is logged in
