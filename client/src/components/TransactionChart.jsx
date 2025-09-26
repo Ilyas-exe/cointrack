@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function TransactionChart() {
   const { transactions } = useSelector((state) => state.transactions);
-    const { selectedCurrency, rates } = useSelector((state) => state.currency);
+  const { selectedCurrency, rates } = useSelector((state) => state.currency);
   const rate = rates[selectedCurrency] || 1;
 
   // 1. Filter for expenses and aggregate data by description (text)
@@ -14,7 +14,7 @@ function TransactionChart() {
     .filter((t) => t.type === 'expense')
     .reduce((acc, transaction) => {
       const convertedAmount = transaction.amount * rate;
-      acc[transaction.text] = (acc[transaction.text] || 0) + transaction.amount;
+      acc[transaction.text] = (acc[transaction.text] || 0) + convertedAmount;
       return acc;
     }, {});
 

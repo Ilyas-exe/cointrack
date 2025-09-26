@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { deleteTransaction, updateTransaction } from '../features/transactions/transactionSlice';
 import Modal from 'react-modal';
 import { FaEdit } from 'react-icons/fa';
@@ -26,7 +26,8 @@ function TransactionItem({ transaction }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateTransaction({ ...transaction, text, amount: +amount }));
+    const amountInUSD = +amount / rate;
+    dispatch(updateTransaction({ ...transaction, text, amount: amountInUSD }));
     closeModal();
   };
 

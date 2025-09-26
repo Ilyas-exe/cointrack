@@ -20,9 +20,9 @@ function Header() {
           CoinTrack
         </Link>
       </div>
-      <nav>
+      <nav className='flex items-center gap-4'>
         <CurrencySelector />
-        <ul className='flex items-center gap-4'>
+        <ul className='flex items-center'>
           {user ? (
             // If user is logged in
             <li>
