@@ -13,16 +13,15 @@ import RecurringExpenses from '../components/RecurringExpenses';
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { user } = useSelector((state) => state.auth);
   const { transactions, isLoading } = useSelector((state) => state.transactions);
 
   useEffect(() => {
     if (!user) navigate('/login');
-    if(user) dispatch(getTransactions());
+    if (user) dispatch(getTransactions());
   }, [user, navigate, dispatch]);
 
-  if (isLoading) { return <h2 className='text-center text-2xl mt-12'>Loading Your Financial Data...</h2>; }
+  if (isLoading) { return <h2 className='text-center text-2xl mt-12'>Loading...</h2>; }
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -33,13 +32,12 @@ function Dashboard() {
       
       <Summary />
 
-      {/* Main 2x2 Grid Content Area */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12'>
         
-        {/* --- SLOT 1: Recent Transactions --- */}
-        <div className='bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col'>
+        {/* --- SLOT 1 & 2: Transactions and Form --- */}
+        <div className='bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col h-[525px]'>
             <h2 className='text-2xl font-bold mb-6'>Recent Transactions</h2>
-            <div className='overflow-y-auto pr-2 max-h-[450px] scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-700'>
+            <div className='flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-700'>
                 {transactions.length > 0 ? (
                     <div className='space-y-4'>
                         <AnimatePresence>
@@ -56,21 +54,19 @@ function Dashboard() {
             </div>
         </div>
         
-        {/* --- SLOT 2: Add New Transaction --- */}
         <TransactionForm />
 
-        {/* --- SLOT 3: Future Feature --- */}
+        {/* --- SLOT 3 & 4: Future and Recurring --- */}
         <div className='bg-slate-800 p-6 rounded-xl shadow-lg'>
              <h2 className='text-2xl font-bold mb-6 text-center'>Future Feature</h2>
-             <p className='text-center text-slate-500'>This space is ready for the next great idea!</p>
+             <p className='text-center text-slate-500'>This space is ready for your next great idea!</p>
         </div>
 
-        {/* --- SLOT 4: Monthly Recurring --- */}
         <RecurringExpenses />
 
       </div>
       
-      {/* --- SLOT 5: Expense Breakdown --- */}
+      {/* --- SLOT 5: Chart --- */}
       <TransactionChart />
     </motion.div>
   );
