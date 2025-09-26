@@ -19,7 +19,12 @@ const transactionSchema = mongoose.Schema(
         type: String,
         required: true,
         enum: ['income', 'expense'], // Amount can only be one of these
-    }
+    },
+    category: { // <-- ADD THIS
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        default: null,
+    },
   },
   {
     timestamps: true,
