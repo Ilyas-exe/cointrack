@@ -30,7 +30,7 @@ function TransactionForm() {
   };
 
   return (
-    <section className='max-w-xl mx-auto bg-slate-800 p-8 rounded-xl shadow-lg'>
+    <section className='bg-slate-800 p-6 rounded-xl shadow-lg h-full'>
       <h2 className='text-2xl font-bold text-center mb-6'>Add New Transaction</h2>
       <form onSubmit={onSubmit}>
         <div className='mb-4'>

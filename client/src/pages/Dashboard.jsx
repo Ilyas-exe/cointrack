@@ -19,11 +19,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (!user) navigate('/login');
-    if(user) dispatch(getTransactions()); // fetch only if user exists
-    return () => {
-        // This reset is optional, you can remove it if you want transactions to persist between page navigations
-        // dispatch(reset()); 
-    }
+    if(user) dispatch(getTransactions());
   }, [user, navigate, dispatch]);
 
   if (isLoading) { return <h2 className='text-center text-2xl mt-12'>Loading Your Financial Data...</h2>; }
@@ -40,11 +36,10 @@ function Dashboard() {
       {/* Main 2x2 Grid Content Area */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12'>
         
-        {/* --- ROW 1 --- */}
+        {/* --- SLOT 1: Recent Transactions --- */}
         <div className='bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col'>
             <h2 className='text-2xl font-bold mb-6'>Recent Transactions</h2>
-            
-            <div className='flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-700'>
+            <div className='overflow-y-auto pr-2 max-h-[450px] scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-700'>
                 {transactions.length > 0 ? (
                     <div className='space-y-4'>
                         <AnimatePresence>
@@ -61,18 +56,21 @@ function Dashboard() {
             </div>
         </div>
         
+        {/* --- SLOT 2: Add New Transaction --- */}
         <TransactionForm />
 
-        {/* --- ROW 2 --- */}
+        {/* --- SLOT 3: Future Feature --- */}
         <div className='bg-slate-800 p-6 rounded-xl shadow-lg'>
              <h2 className='text-2xl font-bold mb-6 text-center'>Future Feature</h2>
              <p className='text-center text-slate-500'>This space is ready for the next great idea!</p>
         </div>
 
+        {/* --- SLOT 4: Monthly Recurring --- */}
         <RecurringExpenses />
 
       </div>
       
+      {/* --- SLOT 5: Expense Breakdown --- */}
       <TransactionChart />
     </motion.div>
   );
