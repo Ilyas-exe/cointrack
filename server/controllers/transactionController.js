@@ -4,7 +4,7 @@ const Transaction = require('../models/transactionModel');
 // @route   GET /api/transactions
 // @access  Private
 const getTransactions = async (req, res) => {
-  const transactions = await Transaction.find({ user: req.user.id });
+  const transactions = await Transaction.find({ user: req.user.id }).sort({ createdAt: -1 });
   res.status(200).json(transactions);
 };
 
