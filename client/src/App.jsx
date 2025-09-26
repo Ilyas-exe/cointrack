@@ -10,9 +10,12 @@ import Register from './pages/Register';
 function App() {
   return (
     <>
+      <div className="space-bg">
+        <div className="stars"></div>
+      </div>
       <Router>
         <div className='container mx-auto p-4'>
-          <Header /> 
+          <Header />
           <Routes>
             <Route path='/' element={<Dashboard />} />
             <Route path='/login' element={<Login />} />
