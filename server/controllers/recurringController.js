@@ -51,4 +51,35 @@ const applyRecurring = async (req, res) => {
   res.status(201).json(newTransactions);
 };
 
-module.exports = { getRecurring, addRecurring, applyRecurring };
+// @desc    Apply a single recurring expense
+// @route   POST /api/recurring/apply/:id
+const applySingleRecurring = async (req, res) => {
+    const expense = await RecurringExpense.findById(req.params.id);
+    // Basic checks
+    if (!expense || expense.user.toString() !== req.user.id) {
+        return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    const hasBeenAppliedThisMonth = expense.lastAppliedMonth === currentMonth && expense.lastAppliedYear === currentYear;
+
+    if (hasBeenAppliedThisMonth) {
+        return res.status(400).json({ message: 'Expense already applied this month' });
+    }
+
+    const transaction = await Transaction.create({
+        user: req.user.id,
+        text: expense.text,
+        amount: expense.amount,
+        type: 'expense',
+    });
+
+    expense.lastAppliedMonth = currentMonth;
+    expense.lastAppliedYear = currentYear;
+    await expense.save();
+
+    res.status(201).json(transaction);
+};
+
+module.exports = { getRecurring, addRecurring, applyRecurring, applySingleRecurring };

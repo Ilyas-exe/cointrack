@@ -19,5 +19,11 @@ const applyRecurring = async (token) => {
   return response.data;
 };
 
-const recurringService = { getRecurring, addRecurring, applyRecurring };
+const applySingleRecurring = async (id, token) => {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const response = await axios.post(API_URL + 'apply/' + id, {}, config);
+  return response.data;
+};
+
+const recurringService = { getRecurring, addRecurring, applyRecurring, applySingleRecurring };
 export default recurringService;
