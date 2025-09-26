@@ -1,19 +1,32 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createTransaction } from '../features/transactions/transactionSlice';
+import { addRecurring } from '../features/recurring/recurringSlice';
 
 function TransactionForm() {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('expense'); // Default to expense
+  const [type, setType] = useState('expense');
+  const [isRecurring, setIsRecurring] = useState(false);
 
   const dispatch = useDispatch();
+  const { selectedCurrency, rates } = useSelector((state) => state.currency);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createTransaction({ text, amount: +amount, type }));
+
+    const rate = rates[selectedCurrency] || 1;
+    const amountInUSD = +amount / rate;
+
+    if (isRecurring) {
+      dispatch(addRecurring({ text, amount: amountInUSD  }));
+    } else {
+      dispatch(createTransaction({ text, amount: amountInUSD, type }));
+    }
+
     setText('');
     setAmount('');
+    setIsRecurring(false);
   };
 
   return (
@@ -58,6 +71,12 @@ function TransactionForm() {
               Expense
             </label>
           </div>
+        </div>
+        <div className='mb-6'>
+          <label className='flex items-center gap-2'>
+            <input type="checkbox" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)} />
+            Save as a monthly recurring expense
+          </label>
         </div>
         <div>
           <button type='submit' className='w-full bg-sky-600 text-white font-bold py-3 px-4 rounded-md hover:bg-sky-700 transition duration-300'>

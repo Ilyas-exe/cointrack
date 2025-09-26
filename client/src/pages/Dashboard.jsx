@@ -6,6 +6,7 @@ import Summary from '../components/Summary';
 import { getTransactions, reset } from '../features/transactions/transactionSlice';
 import TransactionItem from '../components/TransactionItem';
 import TransactionChart from '../components/TransactionChart';
+import RecurringExpenses from '../components/RecurringExpenses';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ function Dashboard() {
       <div className='flex flex-col lg:flex-row gap-8 mt-12'>
 
         {/* Left Column: Transactions List (Yellow Rectangle) */}
-        <section className='lg:w-1/2'>
+        <section className='lg:w-2/3'>
           <h2 className='text-2xl font-bold mb-6 text-center'>Your Transactions</h2>
           {transactions.length > 0 ? (
             <div className='space-y-4 h-[600px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-800'>
@@ -66,9 +67,10 @@ function Dashboard() {
         </section>
 
         {/* Right Column: Add Transaction Form (White Rectangle) */}
-        <section className='lg:w-1/2'>
+        <div className='lg:w-1/3 flex flex-col gap-8'> {/* <-- Changed width and added wrapper */}
           <TransactionForm />
-        </section>
+          <RecurringExpenses />
+        </div>
       </div>
 
       {/* Bottom Section: Chart */}
