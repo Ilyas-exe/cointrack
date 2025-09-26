@@ -23,6 +23,11 @@ export const applySingleRecurring = createAsyncThunk('recurring/applySingle', as
     return await recurringService.applySingleRecurring(id, token);
 });
 
+export const deleteRecurring = createAsyncThunk('recurring/delete', async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    return await recurringService.deleteRecurring(id, token);
+});
+
 export const recurringSlice = createSlice({
     name: 'recurring',
     initialState,
@@ -43,6 +48,9 @@ export const recurringSlice = createSlice({
             .addCase(applySingleRecurring.fulfilled, (state, action) => {
                 // We don't need to do anything here, the component will refresh the main list
                 console.log('Applied single expense:', action.payload);
+            })
+            .addCase(deleteRecurring.fulfilled, (state, action) => {
+                state.items = state.items.filter((item) => item._id !== action.payload.id);
             });
     },
 });

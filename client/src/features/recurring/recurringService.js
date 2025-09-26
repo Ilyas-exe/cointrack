@@ -25,5 +25,11 @@ const applySingleRecurring = async (id, token) => {
   return response.data;
 };
 
-const recurringService = { getRecurring, addRecurring, applyRecurring, applySingleRecurring };
+const deleteRecurring = async (id, token) => {
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+  const response = await axios.delete(API_URL + id, config);
+  return response.data;
+};
+
+const recurringService = { getRecurring, addRecurring, applyRecurring, applySingleRecurring, deleteRecurring  };
 export default recurringService;

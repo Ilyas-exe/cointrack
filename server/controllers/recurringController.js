@@ -82,4 +82,15 @@ const applySingleRecurring = async (req, res) => {
     res.status(201).json(transaction);
 };
 
-module.exports = { getRecurring, addRecurring, applyRecurring, applySingleRecurring };
+// @desc    Delete a recurring expense
+// @route   DELETE /api/recurring/:id
+const deleteRecurring = async (req, res) => {
+    const expense = await RecurringExpense.findById(req.params.id);
+    if (!expense || expense.user.toString() !== req.user.id) {
+        return res.status(401).json({ message: 'Not authorized' });
+    }
+    await expense.remove();
+    res.status(200).json({ id: req.params.id });
+};
+
+module.exports = { getRecurring, addRecurring, applyRecurring, applySingleRecurring, deleteRecurring };

@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import currencyService from './currencyService';
 
+// Get currency from localStorage
+const storedCurrency = localStorage.getItem('currency');
+
 const initialState = {
-  selectedCurrency: 'USD',
+  selectedCurrency: storedCurrency ? JSON.parse(storedCurrency) : 'USD',
   rates: {},
   isError: false,
   isLoading: false,
@@ -21,6 +24,7 @@ export const currencySlice = createSlice({
   reducers: {
     setCurrency: (state, action) => {
       state.selectedCurrency = action.payload;
+      localStorage.setItem('currency', JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) => {
