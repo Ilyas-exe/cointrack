@@ -1,54 +1,51 @@
 import { useSelector } from 'react-redux';
+import { FaArrowUp, FaArrowDown, FaBalanceScale } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 function Summary() {
-  const { transactions } = useSelector((state) => state.transactions);
-  const { selectedCurrency, rates } = useSelector((state) => state.currency);
+    // ... (all the currency logic is the same)
+    const { transactions } = useSelector((state) => state.transactions);
+    const { selectedCurrency, rates } = useSelector((state) => state.currency);
+    const rate = rates[selectedCurrency] || 1;
 
-  // The conversion rate for the selected currency
-  const rate = rates[selectedCurrency] || 1;
+    const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, item) => acc + item.amount, 0);
+    const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((acc, item) => acc + item.amount, 0);
+    const balance = totalIncome - totalExpenses;
 
-  // Calculate totals using the reduce method
-  const totalIncome = transactions
-    .filter((item) => item.type === 'income')
-    .reduce((acc, item) => (acc += item.amount), 0);
+    const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: selectedCurrency }).format(amount * rate);
 
-  const totalExpenses = transactions
-    .filter((item) => item.type === 'expense')
-    .reduce((acc, item) => (acc += item.amount), 0);
+    const cardVariants = {
+      hidden: { y: 20, opacity: 0 },
+      visible: { y: 0, opacity: 1 }
+    };
 
-  const balance = totalIncome - totalExpenses;
+    return (
+        <section className='grid md:grid-cols-3 gap-6 mb-12'>
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" transition={{ duration: 0.5, delay: 0.2 }} className='bg-slate-800 p-6 rounded-xl shadow-lg flex items-center gap-4'>
+                <div className='bg-green-500/20 p-3 rounded-full'><FaArrowUp className='text-green-400' size={24}/></div>
+                <div>
+                    <h3 className='text-slate-400 text-lg'>Total Income</h3>
+                    <p className='text-2xl font-bold text-green-400'>{formatCurrency(totalIncome)}</p>
+                </div>
+            </motion.div>
 
-  // Helper to format numbers as currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: selectedCurrency,
-    }).format(amount * rate);
-  };
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" transition={{ duration: 0.5, delay: 0.3 }} className='bg-slate-800 p-6 rounded-xl shadow-lg flex items-center gap-4'>
+                <div className='bg-red-500/20 p-3 rounded-full'><FaArrowDown className='text-red-400' size={24}/></div>
+                <div>
+                    <h3 className='text-slate-400 text-lg'>Total Expenses</h3>
+                    <p className='text-2xl font-bold text-red-400'>{formatCurrency(totalExpenses)}</p>
+                </div>
+            </motion.div>
 
-  return (
-    <section className='grid md:grid-cols-3 gap-6 mb-12'>
-      {/* Income Card */}
-      <div className='bg-slate-800 p-6 rounded-xl shadow-lg border-l-4 border-green-500'>
-        <h3 className='text-slate-400 text-lg'>Total Income</h3>
-        <p className='text-3xl font-bold text-green-500'>{formatCurrency(totalIncome)}</p>
-      </div>
-
-      {/* Expense Card */}
-      <div className='bg-slate-800 p-6 rounded-xl shadow-lg border-l-4 border-red-500'>
-        <h3 className='text-slate-400 text-lg'>Total Expenses</h3>
-        <p className='text-3xl font-bold text-red-500'>{formatCurrency(totalExpenses)}</p>
-      </div>
-
-      {/* Balance Card */}
-      <div className='bg-slate-800 p-6 rounded-xl shadow-lg border-l-4 border-sky-500'>
-        <h3 className='text-slate-400 text-lg'>Balance</h3>
-        <p className={`text-3xl font-bold ${balance >= 0 ? 'text-white' : 'text-red-500'}`}>
-          {formatCurrency(balance)}
-        </p>
-      </div>
-    </section>
-  );
+            <motion.div variants={cardVariants} initial="hidden" animate="visible" transition={{ duration: 0.5, delay: 0.4 }} className='bg-slate-800 p-6 rounded-xl shadow-lg flex items-center gap-4'>
+                <div className='bg-sky-500/20 p-3 rounded-full'><FaBalanceScale className='text-sky-400' size={24}/></div>
+                <div>
+                    <h3 className='text-slate-400 text-lg'>Balance</h3>
+                    <p className={`text-2xl font-bold ${balance >= 0 ? 'text-white' : 'text-red-400'}`}>{formatCurrency(balance)}</p>
+                </div>
+            </motion.div>
+        </section>
+    );
 }
 
 export default Summary;

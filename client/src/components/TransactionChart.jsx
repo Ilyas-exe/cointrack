@@ -26,15 +26,15 @@ function TransactionChart() {
         label: 'Expenses',
         data: Object.values(expenseData),
         backgroundColor: [
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
+          '#38bdf8', // sky-400
+          '#fbbf24', // amber-400
+          '#34d399', // emerald-400
+          '#a78bfa', // violet-400
+          '#f472b6', // pink-400
+          '#fb7185'  // rose-400
         ],
-        borderColor: '#1E293B', // slate-800
-        borderWidth: 2,
+        borderColor: '#0f172a', // slate-800
+        borderWidth: 4,
       },
     ],
   };
