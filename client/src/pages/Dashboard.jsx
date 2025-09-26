@@ -43,6 +43,7 @@ function Dashboard() {
         {/* --- ROW 1 --- */}
         <div className='bg-slate-800 p-6 rounded-xl shadow-lg flex flex-col'>
             <h2 className='text-2xl font-bold mb-6'>Recent Transactions</h2>
+            
             <div className='flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-track-slate-700'>
                 {transactions.length > 0 ? (
                     <div className='space-y-4'>
