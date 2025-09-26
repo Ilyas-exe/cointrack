@@ -85,12 +85,25 @@ const applySingleRecurring = async (req, res) => {
 // @desc    Delete a recurring expense
 // @route   DELETE /api/recurring/:id
 const deleteRecurring = async (req, res) => {
+  try {
     const expense = await RecurringExpense.findById(req.params.id);
-    if (!expense || expense.user.toString() !== req.user.id) {
-        return res.status(401).json({ message: 'Not authorized' });
+
+    if (!expense) {
+      return res.status(404).json({ message: 'Recurring expense not found' });
     }
-    await expense.remove();
+
+    // Make sure the logged in user matches the expense user
+    if (expense.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    // Use findByIdAndDelete instead of remove()
+    await RecurringExpense.findByIdAndDelete(req.params.id);
+
     res.status(200).json({ id: req.params.id });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
 };
 
 module.exports = { getRecurring, addRecurring, applyRecurring, applySingleRecurring, deleteRecurring };
