@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
 import CurrencySelector from './CurrencySelector';
-import { FaCog } from 'react-icons/fa';
 
 function Header() {
   const navigate = useNavigate();
@@ -27,11 +26,7 @@ function Header() {
           {user ? (
             <>
             
-            <li>
-              <Link to='/settings' className='text-slate-400 hover:text-white transition-colors'>
-                <FaCog size={20} />
-              </Link>
-            </li>
+            
             <li>
               <button
                 onClick={onLogout}
