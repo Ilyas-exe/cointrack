@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 
 // @desc    Get latest currency exchange rates
 // @route   GET /api/currency/rates
@@ -14,4 +14,4 @@ const getRates = async (req, res) => {
   }
 };
 
-export { getRates };
+module.exports = { getRates };

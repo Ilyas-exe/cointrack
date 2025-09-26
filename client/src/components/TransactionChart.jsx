@@ -6,11 +6,14 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function TransactionChart() {
   const { transactions } = useSelector((state) => state.transactions);
+    const { selectedCurrency, rates } = useSelector((state) => state.currency);
+  const rate = rates[selectedCurrency] || 1;
 
   // 1. Filter for expenses and aggregate data by description (text)
   const expenseData = transactions
     .filter((t) => t.type === 'expense')
     .reduce((acc, transaction) => {
+      const convertedAmount = transaction.amount * rate;
       acc[transaction.text] = (acc[transaction.text] || 0) + transaction.amount;
       return acc;
     }, {});
@@ -38,6 +41,23 @@ function TransactionChart() {
 
   const chartOptions = {
     plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let label = context.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed !== null) {
+              label += new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: selectedCurrency,
+              }).format(context.parsed);
+            }
+            return label;
+          },
+        },
+      },
       legend: {
         labels: {
           color: '#F1F5F9', // slate-100

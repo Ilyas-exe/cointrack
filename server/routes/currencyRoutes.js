@@ -1,7 +1,7 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import { getRates } from '../controllers/currencyController.js';
+const { getRates } = require('../controllers/currencyController.js');
 
 router.get('/rates', getRates);
 
-export default router;
+module.exports = router;
